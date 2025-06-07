@@ -1,0 +1,1196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIContentHub | 人工智能内容工具导航平台</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0f1a2a 0%, #152642 50%, #1a1446 100%);
+            min-height: 100vh;
+            color: #e0e0ff;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxkZWZzPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiIHBhdHRlcm5UcmFuc2Zvcm09InJvdGF0ZSgzMCkiPjxyZWN0IHdpZHRoPSIyIiBoZWlnaHQ9IjIiIHg9IjAiIHk9IjAiIGZpbGw9IiM1NmExZmYiIG9wYWNpdHk9IjAuMSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNwYXR0ZXJuKSIvPjwvc3ZnPg==');
+            z-index: -1;
+            opacity: 0.4;
+            pointer-events: none;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 60px 0 40px;
+        }
+        
+        .header h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 16px;
+            letter-spacing: -0.02em;
+            text-shadow: 0 0 15px rgba(101, 200, 255, 0.5);
+            background: linear-gradient(90deg, #fff 0%, #56a1ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .header p {
+            font-size: 1.3rem;
+            color: #a7b7ff;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.5;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+        
+        .stat-item {
+            text-align: center;
+            color: #ffffff;
+            background: rgba(30, 41, 80, 0.7);
+            border-radius: 16px;
+            padding: 15px 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 600;
+            display: block;
+            background: linear-gradient(90deg, #56a1ff, #b56ef9);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: #a7b7ff;
+            margin-top: 4px;
+        }
+        
+        .search-and-filter {
+            position: sticky;
+            top: 0;
+            background: rgba(15, 25, 50, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 20px 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(101, 200, 255, 0.2);
+            margin-bottom: 30px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .search-bar {
+            max-width: 680px;
+            margin: 0 auto 24px;
+            position: relative;
+        }
+        
+        .search-bar input {
+            width: 100%;
+            padding: 16px 50px 16px 20px;
+            border-radius: 12px;
+            border: 1px solid rgba(101, 200, 255, 0.3);
+            font-size: 1.1rem;
+            background: rgba(15, 25, 50, 0.7);
+            color: #ffffff;
+            box-shadow: 0 0 20px rgba(101, 200, 255, 0.15);
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        
+        .search-bar input:focus {
+            box-shadow: 0 0 30px rgba(101, 200, 255, 0.25), 0 0 0 1px rgba(101, 200, 255, 0.5);
+            border-color: rgba(101, 200, 255, 0.5);
+        }
+        
+        .search-bar input::placeholder {
+            color: rgba(167, 183, 255, 0.6);
+        }
+        
+        .search-icon {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #56a1ff;
+            font-size: 1.2rem;
+        }
+        
+        .clear-search {
+            position: absolute;
+            right: 50px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #ffffff;
+            font-size: 0.9rem;
+            background: rgba(101, 200, 255, 0.3);
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .clear-search:hover {
+            background: rgba(101, 200, 255, 0.5);
+            box-shadow: 0 0 10px rgba(101, 200, 255, 0.5);
+        }
+        
+        .reset-tag {
+            background: linear-gradient(135deg, rgba(101, 200, 255, 0.2), rgba(181, 110, 249, 0.2));
+            font-weight: 600;
+            border: 1px solid rgba(101, 200, 255, 0.4);
+        }
+        
+        .filters {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-btn {
+            padding: 10px 20px;
+            border-radius: 20px;
+            border: 1px solid rgba(101, 200, 255, 0.3);
+            background: rgba(15, 25, 50, 0.6);
+            color: #a7b7ff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+            font-weight: 500;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .filter-btn:hover {
+            background: rgba(30, 41, 80, 0.8);
+            transform: translateY(-1px);
+            box-shadow: 0 0 15px rgba(101, 200, 255, 0.2);
+            border-color: rgba(101, 200, 255, 0.5);
+        }
+        
+        .filter-btn.active {
+            background: linear-gradient(135deg, #1e52a8, #4f28b8);
+            color: white;
+            box-shadow: 0 0 20px rgba(101, 200, 255, 0.3);
+            border-color: rgba(101, 200, 255, 0.7);
+        }
+        
+        .popular-tags {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .popular-tag {
+            padding: 6px 14px;
+            border-radius: 15px;
+            background: rgba(101, 200, 255, 0.15);
+            color: #56a1ff;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid rgba(101, 200, 255, 0.2);
+        }
+        
+        .popular-tag:hover {
+            background: rgba(101, 200, 255, 0.25);
+            box-shadow: 0 0 15px rgba(101, 200, 255, 0.25);
+            transform: translateY(-2px);
+        }
+        
+        .reset-tag {
+            background: linear-gradient(135deg, rgba(101, 200, 255, 0.2), rgba(181, 110, 249, 0.2));
+            font-weight: 600;
+            border: 1px solid rgba(101, 200, 255, 0.4);
+        }
+        
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin: 40px 0 24px;
+            color: #ffffff;
+            letter-spacing: -0.02em;
+            text-align: center;
+            text-shadow: 0 0 15px rgba(101, 200, 255, 0.3);
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 10%;
+            width: 80%;
+            height: 2px;
+            background: linear-gradient(90deg, rgba(101, 200, 255, 0), rgba(101, 200, 255, 0.7), rgba(101, 200, 255, 0));
+        }
+        
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 24px;
+            margin-bottom: 50px;
+        }
+        
+        .tool-card {
+            background: rgba(15, 25, 50, 0.7);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(101, 200, 255, 0.15);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+        
+        .tool-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 30px rgba(101, 200, 255, 0.2);
+            border-color: rgba(101, 200, 255, 0.3);
+        }
+        
+        .tool-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(101, 200, 255, 0.05) 0%, rgba(0, 0, 0, 0) 100%);
+            pointer-events: none;
+        }
+        
+        .tool-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .tool-logo {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #1e52a8, #4f28b8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 1.3rem;
+            margin-right: 16px;
+            box-shadow: 0 0 20px rgba(101, 200, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .tool-logo::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: rotate(45deg);
+            animation: shimmer 3s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
+        }
+        
+        .tool-info h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 5px;
+            text-shadow: 0 0 10px rgba(101, 200, 255, 0.3);
+        }
+        
+        .tool-category {
+            font-size: 0.9rem;
+            color: #56a1ff;
+            font-weight: 500;
+        }
+        
+        .tool-description {
+            color: #a7b7ff;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+        }
+        
+        .tool-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+        
+        .feature-tag {
+            background: rgba(101, 200, 255, 0.1);
+            color: #56a1ff;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            border: 1px solid rgba(101, 200, 255, 0.2);
+            transition: all 0.2s ease;
+        }
+        
+        .feature-tag:hover {
+            background: rgba(101, 200, 255, 0.15);
+            box-shadow: 0 0 10px rgba(101, 200, 255, 0.2);
+        }
+        
+        .tool-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .pricing {
+            font-weight: 600;
+            color: #ffffff;
+            font-size: 0.95rem;
+        }
+        
+        .visit-btn {
+            background: linear-gradient(135deg, #1e52a8, #4f28b8);
+            color: white;
+            padding: 10px 18px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95rem;
+            border: 1px solid rgba(101, 200, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .visit-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #4f28b8, #1e52a8);
+            z-index: -1;
+            transition: opacity 0.3s ease;
+            opacity: 0;
+        }
+        
+        .visit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 20px rgba(101, 200, 255, 0.4);
+            border-color: rgba(101, 200, 255, 0.5);
+        }
+        
+        .visit-btn:hover::before {
+            opacity: 1;
+        }
+        
+        .category-section {
+            margin-bottom: 60px;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 60px 20px;
+            color: #a7b7ff;
+            background: rgba(15, 25, 50, 0.7);
+            border-radius: 16px;
+            margin-top: 40px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(101, 200, 255, 0.15);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+        
+        .footer h3 {
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+            color: #ffffff;
+            font-weight: 600;
+            text-shadow: 0 0 15px rgba(101, 200, 255, 0.3);
+        }
+        
+        .not-found {
+            text-align: center;
+            padding: 60px 0;
+            display: none;
+        }
+        
+        .not-found h3 {
+            font-size: 1.5rem;
+            margin-bottom: 16px;
+            color: #ffffff;
+            text-shadow: 0 0 15px rgba(101, 200, 255, 0.3);
+        }
+        
+        .not-found p {
+            color: #a7b7ff;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            border-radius: 25px;
+            background: linear-gradient(135deg, #1e52a8, #4f28b8);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(101, 200, 255, 0.3);
+            z-index: 1000;
+            border: 1px solid rgba(101, 200, 255, 0.3);
+        }
+        
+        .back-to-top.visible {
+            opacity: 1;
+        }
+        
+        .back-to-top:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 30px rgba(101, 200, 255, 0.5);
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2.5rem;
+            }
+            
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats {
+                gap: 20px;
+            }
+            
+            .stat-number {
+                font-size: 2rem;
+            }
+            
+            .container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>AIContentHub</h1>
+            <p>探索2025年最强大的AI内容生成工具，提升生产力，革新您的内容创作与营销策略</p>
+            <div class="stats">
+                <div class="stat-item">
+                    <span class="stat-number">26+</span>
+                    <span class="stat-label">AI Tools</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">6</span>
+                    <span class="stat-label">Categories</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">2025</span>
+                    <span class="stat-label">Updated</span>
+                </div>
+            </div>
+        </header>
+        
+        <div class="search-and-filter">
+            <div class="search-bar">
+                <input type="text" placeholder="Search AI tools..." id="searchInput">
+                <span class="search-icon">🔍</span>
+                <span class="clear-search" id="clearSearch" style="display: none;">✕</span>
+            </div>
+            
+            <div class="filters">
+                <button class="filter-btn active" data-category="all">All Tools</button>
+                <button class="filter-btn" data-category="writing">Writing</button>
+                <button class="filter-btn" data-category="visual">Visual Content</button>
+                <button class="filter-btn" data-category="social">Social Media</button>
+                <button class="filter-btn" data-category="seo">SEO & Marketing</button>
+                <button class="filter-btn" data-category="video">Video & Audio</button>
+            </div>
+            
+            <div class="popular-tags">
+                <span class="popular-tag" data-tag="free">Free Tools</span>
+                <span class="popular-tag" data-tag="languages">Multilingual</span>
+                <span class="popular-tag" data-tag="optimization">SEO Optimization</span>
+                <span class="popular-tag" data-tag="api">API Integration</span>
+                <span class="popular-tag" data-tag="team">Team Collaboration</span>
+                <span class="popular-tag reset-tag" id="resetFilters">View All</span>
+            </div>
+        </div>
+        
+        <div class="not-found" id="notFound">
+            <h3>No Matching Tools Found</h3>
+            <p>Try different search terms or filters, or browse the complete tool list.</p>
+        </div>
+        
+        <div class="category-section" id="writingSection">
+            <h2 class="section-title">Writing Tools</h2>
+            <div class="tools-grid" id="toolsGrid">
+                <!-- Writing Tools -->
+                <div class="tool-card" data-category="writing">
+                    <div class="tool-header">
+                        <div class="tool-logo">J</div>
+                        <div class="tool-info">
+                            <h3>Jasper AI</h3>
+                            <div class="tool-category">AI Writing Assistant</div>
+                        </div>
+                    </div>
+                    <p class="tool-description">Advanced AI writing tool with 50+ templates for blogs, ads, emails, and long-form content. Perfect for businesses and marketers.</p>
+                    <div class="tool-features">
+                        <span class="feature-tag">Long-form Content</span>
+                        <span class="feature-tag">50+ Templates</span>
+                        <span class="feature-tag">SEO Optimization</span>
+                    </div>
+                    <div class="tool-footer">
+                        <div class="pricing">From $39/mo</div>
+                        <a href="https://jasper.ai" class="visit-btn">Visit Tool →</a>
+                    </div>
+                </div>
+                
+                <div class="tool-card" data-category="writing">
+                    <div class="tool-header">
+                        <div class="tool-logo">C</div>
+                        <div class="tool-info">
+                            <h3>Copy.ai</h3>
+                            <div class="tool-category">AI Copywriting</div>
+                        </div>
+                    </div>
+                    <p class="tool-description">AI-powered copywriting tool for marketing copy, social media posts, and creative content. Great for short-form content.</p>
+                    <div class="tool-features">
+                        <span class="feature-tag">Marketing Copy</span>
+                        <span class="feature-tag">Social Posts</span>
+                        <span class="feature-tag">Free Plan</span>
+                    </div>
+                    <div class="tool-footer">
+                        <div class="pricing">Free - $49/mo</div>
+                        <a href="https://copy.ai" class="visit-btn">Visit Tool →</a>
+                    </div>
+                </div>
+                
+                <div class="tool-card" data-category="writing">
+                    <div class="tool-header">
+                        <div class="tool-logo">W</div>
+                        <div class="tool-info">
+                            <h3>Writesonic</h3>
+                            <div class="tool-category">AI Content Platform</div>
+                        </div>
+                    </div>
+                    <p class="tool-description">Comprehensive AI writing platform with grammar checking, SEO optimization, and plagiarism detection.</p>
+                    <div class="tool-features">
+                        <span class="feature-tag">Grammar Check</span>
+                        <span class="feature-tag">SEO Features</span>
+                        <span class="feature-tag">Plagiarism Check</span>
+                    </div>
+                    <div class="tool-footer">
+                        <div class="pricing">From $20/mo</div>
+                        <a href="https://writesonic.com" class="visit-btn">Visit Tool →</a>
+                    </div>
+                </div>
+                
+                <div class="tool-card" data-category="writing">
+                    <div class="tool-header">
+                        <div class="tool-logo">G</div>
+                        <div class="tool-info">
+                            <h3>Grammarly</h3>
+                            <div class="tool-category">AI Writing Assistant</div>
+                        </div>
+                    </div>
+                    <p class="tool-description">AI-powered writing assistant that learns your style. Perfect for grammar, tone, and style improvements.</p>
+                    <div class="tool-features">
+                        <span class="feature-tag">Grammar & Style</span>
+                        <span class="feature-tag">Tone Detection</span>
+                        <span class="feature-tag">Personal Style</span>
+                    </div>
+                    <div class="tool-footer">
+                        <div class="pricing">Free - $30/mo</div>
+                        <a href="https://grammarly.com" class="visit-btn">Visit Tool →</a>
+                    </div>
+                </div>
+                
+                <div class="tool-card" data-category="writing">
+                    <div class="tool-header">
+                        <div class="tool-logo">🤖</div>
+                        <div class="tool-info">
+                            <h3>ChatGPT</h3>
+                            <div class="tool-category">AI Conversational</div>
+                        </div>
+                    </div>
+                    <p class="tool-description">Versatile AI chatbot for content creation, brainstorming, coding, and detailed conversations across all topics.</p>
+                    <div class="tool-features">
+                        <span class="feature-tag">Conversational AI</span>
+                        <span class="feature-tag">Code Generation</span>
+                        <span class="feature-tag">Brainstorming</span>
+                    </div>
+                    <div class="tool-footer">
+                        <div class="pricing">Free - $20/mo</div>
+                        <a href="https://chat.openai.com" class="visit-btn">Visit Tool →</a>
+                    </div>
+                </div>
+                
+                <!-- 新增写作工具 -->
+                <div class="tool-card" data-category="writing">
+                    <div class="tool-header">
+                        <div class="tool-logo">W</div>
+                        <div class="tool-info">
+                            <h3>Wordtune</h3>
+                            <div class="tool-category">AI Writing Assistant</div>
+                        </div>
+                    </div>
+                    <p class="tool-description">AI writing improvement tool, focusing on sentence rewriting and language optimization to help users improve writing quality and expression clarity</p>
+                    <div class="tool-features">
+                        <span class="feature-tag">Sentence Rewriting Suggestions</span>
+                        <span class="feature-tag">Tone Adjustment</span>
+                        <span class="feature-tag">Browser Plugin</span>
+                    </div>
+                    <div class="tool-footer">
+                        <div class="pricing">Free - $24.99/mo</div>
+                        <a href="https://www.wordtune.com" class="visit-btn">Visit Tool →</a>
+                    </div>
+                </div>
+                
+                <div class="tool-card" data-category="writing">
+                    <div class="tool-header">
+                        <div class="tool-logo">A</div>
+                        <div class="tool-info">
+                            <h3>Anyword</h3>
+                            <div class="tool-category">AI Copywriting</div>
+                        </div>
+                    </div>
+                    <p class="tool-description">Data-driven AI copywriting tool, providing performance prediction and optimization suggestions, focusing on improving content conversion and engagement</p>
+                    <div class="tool-features">
+                        <span class="feature-tag">Performance Prediction Score</span>
+                        <span class="feature-tag">Audience Analysis</span>
+                        <span class="feature-tag">Brand Voice Training</span>
+                    </div>
+                    <div class="tool-footer">
+                        <div class="pricing">$39/mo - $99/mo</div>
+                        <a href="https://anyword.com" class="visit-btn">Visit Tool →</a>
+                    </div>
+                </div>
+                
+                <div class="tool-card" data-category="writing">
+                    <div class="tool-header">
+                        <div class="tool-logo">C</div>
+                        <div class="tool-info">
+                            <h3>Copysmith</h3>
+                            <div class="tool-category">AI Copywriting</div>
+                        </div>
+                    </div>
+                    <p class="tool-description">Specialized AI writing tool for e-commerce and digital marketing, adept at product descriptions, ad copy, and marketing content creation</p>
+                    <div class="tool-features">
+                        <span class="feature-tag">E-commerce Product Description</span>
+                        <span class="feature-tag">Bulk Content Generation</span>
+                        <span class="feature-tag">API Integration</span>
+                    </div>
+                    <div class="tool-footer">
+                        <div class="pricing">$19/mo - $59/mo</div>
+                        <a href="https://copysmith.ai" class="visit-btn">Visit Tool →</a>
+                    </div>
+                </div>
+                
+                <div class="tool-card" data-category="writing">
+                    <div class="tool-header">
+                        <div class="tool-logo">H</div>
+                        <div class="tool-info">
+                            <h3>Hypotenuse AI</h3>
+                            <div class="tool-category">Content Marketing</div>
+                        </div>
+                    </div>
+                    <p class="tool-description">Focused content marketing AI writing platform, providing a full-process solution from keyword research to content publishing</p>
+                    <div class="tool-features">
+                        <span class="feature-tag">Keyword Research</span>
+                        <span class="feature-tag">Content Planning</span>
+                        <span class="feature-tag">Multi-Platform Publishing</span>
+                    </div>
+                    <div class="tool-footer">
+                        <div class="pricing">$15/mo - $59/mo</div>
+                        <a href="https://www.hypotenuse.ai" class="visit-btn">Visit Tool →</a>
+                    </div>
+                </div>
+                
+                <div class="tool-card" data-category="writing">
+                    <div class="tool-header">
+                        <div class="tool-logo">P</div>
+                        <div class="tool-info">
+                            <h3>Peppertype.ai</h3>
+                            <div class="tool-category">Content Platform</div>
+                        </div>
+                    </div>
+                    <p class="tool-description">AI writing platform for content teams, providing a one-stop solution for content strategy, creation, and optimization</p>
+                    <div class="tool-features">
+                        <span class="feature-tag">Content Strategy Planning</span>
+                        <span class="feature-tag">Team Collaboration</span>
+                        <span class="feature-tag">Content Review</span>
+                    </div>
+                    <div class="tool-footer">
+                        <div class="pricing">$35/mo - $199/mo</div>
+                        <a href="https://www.peppertype.ai" class="visit-btn">Visit Tool →</a>
+                    </div>
+                </div>
+                
+                <div class="tool-card" data-category="writing">
+                    <div class="tool-header">
+                        <div class="tool-logo">S</div>
+                        <div class="tool-info">
+                            <h3>Simplified</h3>
+                            <div class="tool-category">All-in-one Platform</div>
+                        </div>
+                    </div>
+                    <p class="tool-description">Integrated AI platform with writing, design, and marketing features, providing a comprehensive content creation solution for small and medium businesses</p>
+                    <div class="tool-features">
+                        <span class="feature-tag">Multi-Function Integration</span>
+                        <span class="feature-tag">Rich Template Library</span>
+                        <span class="feature-tag">Social Media Management</span>
+                    </div>
+                    <div class="tool-footer">
+                        <div class="pricing">Free - $49/mo</div>
+                        <a href="https://simplified.com" class="visit-btn">Visit Tool →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="category-section" id="visualSection">
+            <h2 class="section-title">Visual Content Tools</h2>
+            <div class="tools-grid">
+                <!-- Visual Content Tools -->
+                <div class="tool-card" data-category="visual">
+                    <div class="tool-header">
+                        <div class="tool-logo">🎨</div>
+                        <div class="tool-info">
+                            <h3>DALL-E 3</h3>
+                            <div class="tool-category">AI Image Generator</div>
+                        </div>
+                    </div>
+                    <p class="tool-description">Advanced AI image generation tool for creating stunning visuals, artwork, and marketing graphics from text prompts.</p>
+                    <div class="tool-features">
+                        <span class="feature-tag">Text-to-Image</span>
+                        <span class="feature-tag">High Quality</span>
+                        <span class="feature-tag">Creative Control</span>
+                    </div>
+                    <div class="tool-footer">
+                        <div class="pricing">$20/mo</div>
+                        <a href="https://openai.com/dall-e-3" class="visit-btn">Visit Tool →</a>
+                    </div>
+                </div>
+                
+                <div class="tool-card" data-category="visual">
+                    <div class="tool-header">
+                        <div class="tool-logo">M</div>
+                        <div class="tool-info">
+                            <h3>Midjourney</h3>
+                            <div class="tool-category">AI Art Generator</div>
+                        </div>
+                    </div>
+                    <p class="tool-description">Premium AI art generator known for creating beautiful, artistic images perfect for creative projects and marketing.</p>
+                    <div class="tool-features">
+                        <span class="feature-tag">Artistic Style</span>
+                        <span class="feature-tag">High Resolution</span>
+                        <span class="feature-tag">Community</span>
+                    </div>
+                    <div class="tool-footer">
+                        <div class="pricing">From $10/mo</div>
+                        <a href="https://midjourney.com" class="visit-btn">Visit Tool →</a>
+                    </div>
+                </div>
+                
+                <div class="tool-card" data-category="visual">
+                    <div class="tool-header">
+                        <div class="tool-logo">C</div>
+                        <div class="tool-info">
+                            <h3>Canva AI</h3>
+                            <div class="tool-category">Design Platform</div>
+                        </div>
+                    </div>
+                    <p class="tool-description">AI-powered design platform with smart templates, background removal, and automated design suggestions.</p>
+                    <div class="tool-features">
+                        <span class="feature-tag">Templates</span>
+                        <span class="feature-tag">Background Removal</span>
+                        <span class="feature-tag">Brand Kit</span>
+                    </div>
+                    <div class="tool-footer">
+                        <div class="pricing">Free - $15/mo</div>
+                        <a href="https://canva.com" class="visit-btn">Visit Tool →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="category-section" id="socialSection">
+            <h2 class="section-title">Social Media Tools</h2>
+            <div class="tools-grid">
+                <!-- Social Media Tools -->
+                <div class="tool-card" data-category="social">
+                    <div class="tool-header">
+                        <div class="tool-logo">B</div>
+                        <div class="tool-info">
+                            <h3>Buffer AI</h3>
+                            <div class="tool-category">Social Media AI</div>
+                        </div>
+                    </div>
+                    <p class="tool-description">AI assistant for social media content creation, post variations, and content repurposing across all platforms.</p>
+                    <div class="tool-features">
+                        <span class="feature-tag">Post Variations</span>
+                        <span class="feature-tag">Content Repurposing</span>
+                        <span class="feature-tag">Multi-Platform</span>
+                    </div>
+                    <div class="tool-footer">
+                        <div class="pricing">From $6/mo</div>
+                        <a href="https://buffer.com" class="visit-btn">Visit Tool →</a>
+                    </div>
+                </div>
+                
+                <div class="tool-card" data-category="social">
+                    <div class="tool-header">
+                        <div class="tool-logo">H</div>
+                        <div class="tool-info">
+                            <h3>Hootsuite AI</h3>
+                            <div class="tool-category">Social Management</div>
+                        </div>
+                    </div>
+                    <p class="tool-description">AI-powered social media management with automated posting, content suggestions, and performance analytics.</p>
+                    <div class="tool-features">
+                        <span class="feature-tag">Auto Scheduling</span>
+                        <span class="feature-tag">Analytics</span>
+                        <span class="feature-tag">Content Ideas</span>
+                    </div>
+                    <div class="tool-footer">
+                        <div class="pricing">From $99/mo</div>
+                        <a href="https://hootsuite.com" class="visit-btn">Visit Tool →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="category-section" id="seoSection">
+            <h2 class="section-title">SEO & Marketing Tools</h2>
+            <div class="tools-grid">
+                <!-- SEO & Marketing Tools -->
+                <div class="tool-card" data-category="seo">
+                    <div class="tool-header">
+                        <div class="tool-logo">S</div>
+                        <div class="tool-info">
+                            <h3>Surfer SEO</h3>
+                            <div class="tool-category">SEO Content AI</div>
+                        </div>
+                    </div>
+                    <p class="tool-description">AI-powered SEO content optimization tool with keyword research, content planning, and SERP analysis.</p>
+                    <div class="tool-features">
+                        <span class="feature-tag">SEO Optimization</span>
+                        <span class="feature-tag">Content Planning</span>
+                        <span class="feature-tag">SERP Analysis</span>
+                    </div>
+                    <div class="tool-footer">
+                        <div class="pricing">From $89/mo</div>
+                        <a href="https://surferseo.com" class="visit-btn">Visit Tool →</a>
+                    </div>
+                </div>
+                
+                <div class="tool-card" data-category="seo">
+                    <div class="tool-header">
+                        <div class="tool-logo">M</div>
+                        <div class="tool-info">
+                            <h3>MarketMuse</h3>
+                            <div class="tool-category">Content Strategy AI</div>
+                        </div>
+                    </div>
+                    <p class="tool-description">AI-driven content strategy platform for topic research, content gaps analysis, and competitive intelligence.</p>
+                    <div class="tool-features">
+                        <span class="feature-tag">Content Strategy</span>
+                        <span class="feature-tag">Gap Analysis</span>
+                        <span class="feature-tag">Competitive Intel</span>
+                    </div>
+                    <div class="tool-footer">
+                        <div class="pricing">From $149/mo</div>
+                        <a href="https://marketmuse.com" class="visit-btn">Visit Tool →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="category-section" id="videoSection">
+            <h2 class="section-title">Video & Audio Tools</h2>
+            <div class="tools-grid">
+                <!-- Video & Audio Tools -->
+                <div class="tool-card" data-category="video">
+                    <div class="tool-header">
+                        <div class="tool-logo">S</div>
+                        <div class="tool-info">
+                            <h3>Synthesia</h3>
+                            <div class="tool-category">AI Video Generator</div>
+                        </div>
+                    </div>
+                    <p class="tool-description">Create professional AI videos with virtual presenters in 120+ languages without cameras or actors.</p>
+                    <div class="tool-features">
+                        <span class="feature-tag">AI Avatars</span>
+                        <span class="feature-tag">120+ Languages</span>
+                        <span class="feature-tag">No Equipment</span>
+                    </div>
+                    <div class="tool-footer">
+                        <div class="pricing">From $30/mo</div>
+                        <a href="https://synthesia.io" class="visit-btn">Visit Tool →</a>
+                    </div>
+                </div>
+                
+                <div class="tool-card" data-category="video">
+                    <div class="tool-header">
+                        <div class="tool-logo">L</div>
+                        <div class="tool-info">
+                            <h3>Loom AI</h3>
+                            <div class="tool-category">Video Messaging</div>
+                        </div>
+                    </div>
+                    <p class="tool-description">AI-enhanced video messaging with automated transcriptions, summaries, and smart editing features.</p>
+                    <div class="tool-features">
+                        <span class="feature-tag">Auto Transcription</span>
+                        <span class="feature-tag">Video Summaries</span>
+                        <span class="feature-tag">Smart Editing</span>
+                    </div>
+                    <div class="tool-footer">
+                        <div class="pricing">Free - $12/mo</div>
+                        <a href="https://loom.com" class="visit-btn">Visit Tool →</a>
+                    </div>
+                </div>
+                
+                <div class="tool-card" data-category="video">
+                    <div class="tool-header">
+                        <div class="tool-logo">🎵</div>
+                        <div class="tool-info">
+                            <h3>Murf AI</h3>
+                            <div class="tool-category">AI Voice Generator</div>
+                        </div>
+                    </div>
+                    <p class="tool-description">Professional AI voice generator with 120+ voices in 20+ languages for voiceovers and audio content.</p>
+                    <div class="tool-features">
+                        <span class="feature-tag">120+ Voices</span>
+                        <span class="feature-tag">20+ Languages</span>
+                        <span class="feature-tag">Studio Quality</span>
+                    </div>
+                    <div class="tool-footer">
+                        <div class="pricing">From $29/mo</div>
+                        <a href="https://murf.ai" class="visit-btn">Visit Tool →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer class="footer">
+            <h3>准备好革新您的内容策略了吗？</h3>
+            <p>这些AI工具代表了内容生成技术的最前沿。从免费选项开始，随着需求增长逐步提升。</p>
+            <p style="margin-top: 20px; font-size: 0.9rem;">© 2025 <a href="https://aicontenthub.online" style="color: #56a1ff; text-decoration: none;">aicontenthub.online</a> - 您的AI内容导航中心</p>
+        </footer>
+        
+        <div class="back-to-top" id="backToTop">↑</div>
+    </div>
+    
+    <script>
+        // 搜索功能
+        const searchInput = document.getElementById('searchInput');
+        const toolsGrid = document.querySelectorAll('.tools-grid');
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        let toolCards;
+        const popularTags = document.querySelectorAll('.popular-tag');
+        const notFound = document.getElementById('notFound');
+        const categorySections = document.querySelectorAll('.category-section');
+        const backToTop = document.getElementById('backToTop');
+        
+        let currentFilter = 'all';
+        let currentSearchTerm = '';
+        
+        // 搜索函数
+        searchInput.addEventListener('input', function() {
+            currentSearchTerm = this.value.toLowerCase();
+            document.getElementById('clearSearch').style.display = currentSearchTerm ? 'flex' : 'none';
+            filterTools(currentFilter, currentSearchTerm);
+        });
+        
+        // 筛选函数
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                // 更新活动筛选按钮
+                filterBtns.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                
+                currentFilter = this.dataset.category;
+                filterTools(currentFilter, currentSearchTerm);
+            });
+        });
+        
+        // 热门标签筛选
+        popularTags.forEach(tag => {
+            tag.addEventListener('click', function() {
+                if (this.classList.contains('reset-tag')) {
+                    // 清除所有筛选
+                    searchInput.value = '';
+                    currentSearchTerm = '';
+                    filterTools(currentFilter, currentSearchTerm);
+                    document.getElementById('clearSearch').style.display = 'none';
+                } else {
+                    // 应用标签筛选
+                    const tagText = this.dataset.tag.toLowerCase();
+                    searchInput.value = tagText;
+                    currentSearchTerm = tagText;
+                    filterTools(currentFilter, currentSearchTerm);
+                    document.getElementById('clearSearch').style.display = 'flex';
+                }
+            });
+        });
+        
+        // 搜索框清除按钮
+        document.getElementById('clearSearch').addEventListener('click', function() {
+            searchInput.value = '';
+            currentSearchTerm = '';
+            filterTools(currentFilter, currentSearchTerm);
+            this.style.display = 'none';
+            searchInput.focus();
+        });
+        
+        function filterTools(category, searchTerm) {
+            console.log(`筛选: 类别=${category}, 搜索词="${searchTerm}"`);
+            let visibleCount = 0;
+            
+            // 获取所有工具卡片（重新获取以确保包含所有卡片）
+            toolCards = document.querySelectorAll('.tool-card');
+            console.log(`筛选: 找到 ${toolCards.length} 个工具卡片`);
+            
+            // 重置分类区域可见性
+            categorySections.forEach(section => {
+                section.style.display = 'block';
+            });
+            
+            // 筛选每个卡片
+            toolCards.forEach(card => {
+                const cardCategory = card.dataset.category;
+                const cardTitle = card.querySelector('h3').textContent.toLowerCase();
+                const cardDescription = card.querySelector('.tool-description').textContent.toLowerCase();
+                const cardFeatures = Array.from(card.querySelectorAll('.feature-tag')).map(tag => tag.textContent.toLowerCase());
+                
+                // 检查是否匹配类别和搜索词
+                const matchesCategory = category === 'all' || cardCategory === category;
+                const matchesSearch = searchTerm === '' || 
+                                    cardTitle.includes(searchTerm) || 
+                                    cardDescription.includes(searchTerm) ||
+                                    cardFeatures.some(feature => feature.includes(searchTerm));
+                
+                // 根据匹配结果显示或隐藏卡片
+                if (matchesCategory && matchesSearch) {
+                    card.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+            
+            console.log(`筛选结果: ${visibleCount} 个卡片匹配`);
+            
+            // 处理分类区域显示
+            updateCategorySectionsVisibility(category);
+            
+            // 显示或隐藏"未找到"消息
+            if (visibleCount === 0) {
+                notFound.style.display = 'block';
+            } else {
+                notFound.style.display = 'none';
+            }
+        }
+        
+        // 更新分类区域可见性
+        function updateCategorySectionsVisibility(category) {
+            categorySections.forEach(section => {
+                const visibleCards = Array.from(section.querySelectorAll('.tool-card')).filter(
+                    card => card.style.display !== 'none'
+                );
+                
+                if (visibleCards.length === 0) {
+                    section.style.display = 'none';
+                } else {
+                    section.style.display = 'block';
+                }
+            });
+        }
+        
+        // 返回顶部按钮
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 500) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
+        });
+        
+        backToTop.addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    </script>
+</body>
+</html>
